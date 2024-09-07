@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Meter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffcccc;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header {
+            background-color: #ff6666;
+            padding: 10px;
+            width: 100%;
+            text-align: center;
+            color: white;
+        }
+        section {
+            background-color: white;
+            padding: 20px;
+            margin: 20px 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: calc(100% - 40px);
+        }
+        input[type="text"], input[type="submit"] {
+            padding: 10px;
+            margin: 10px 0;
+            width: calc(100% - 20px);
+            box-sizing: border-box;
+        }
+        footer {
+            background-color: #ff6666;
+            padding: 10px;
+            width: 100%;
+            text-align: center;
+            color: white;
+            margin-top: auto;
+        }
+        .result {
+            font-size: 20px;
+            margin-top: 20px;
+            color: #ff3333;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Love Meter</h1>
+    </header>
+
+    <section>
+        <h2>Cek Tingkat Kecocokan Cinta</h2>
+        <p>Masukkan nama kamu dan pasangan untuk mengetahui tingkat kecocokan cinta kalian.</p>
+
+        <form action="#" method="POST">
+            <label for="yourName">Nama Kamu:</label><br>
+            <input type="text" id="yourName" name="yourName" required><br><br>
+
+            <label for="partnerName">Nama Pasangan:</label><br>
+            <input type="text" id="partnerName" name="partnerName" required><br><br>
+
+            <input type="submit" value="Cek Love Meter">
+        </form>
+
+        <div id="result" class="result"></div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Love Meter</p>
+    </footer>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const yourName = document.getElementById('yourName').value;
+            const partnerName = document.getElementById('partnerName').value;
+
+            // Menghasilkan persentase kecocokan cinta acak
+            const lovePercentage = Math.floor(Math.random() * 101);
+
+            let resultMessage = `Nama Kamu: ${yourName}, Nama Pasangan: ${partnerName}<br>`;
+            resultMessage += `Tingkat kecocokan cinta kalian adalah <strong>${lovePercentage}%</strong>.`;
+
+            document.getElementById('result').innerHTML = resultMessage;
+        });
+    </script>
+
+</body>
+</html>
