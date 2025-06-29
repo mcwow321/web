@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Art Session - Exposition, Sun Side, Moon Side & Closure</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            transition: all 0.5s ease;
+        }
+
+        /* Page Styles */
+        .page {
+            min-height: 100vh;
+            padding: 20px;
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .exposition-page {
+            background: linear-gradient(135deg, #6B46C1 0%, #4C1D95 100%);
+        }
+
+        .sun-side-page {
+            background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
+        }
+
+        .moon-side-page {
+            background: linear-gradient(135deg, #1E40AF 0%, #1E3A8A 100%);
+        }
+
+        .art-session-page {
+            background: linear-gradient(135deg, #B45309 0%, #92400E 100%);
+            position: relative;
+        }
+
+        .closure-page {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Title Styles */
+        .exposition-page h1 {
+            color: white;
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 40px;
+            text-transform: lowercase;
+            letter-spacing: 2px;
+        }
+
+        .page-title {
+            background: #000000;
+            color: white;
+            padding: 15px 25px;
+            font-size: 2rem;
+            font-weight: bold;
+            text-transform: lowercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+
+        /* Content Box Styles */
+        .content-box {
+            background: #000000;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 20px,
+                rgba(255, 255, 255, 0.02) 20px,
+                rgba(255, 255, 255, 0.02) 40px
+            );
+            pointer-events: none;
+        }
+
+        .content-box p {
+            color: #ffffff;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+            text-align: justify;
+        }
+
+        .content-box.large {
+            min-height: 200px;
+        }
+
+        .content-box.small {
+            min-height: 120px;
+        }
+
+        /* Art Session Specific Styles */
+        .art-session-layout {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            min-height: 70vh;
+        }
+
+        .art-text-area {
+            background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%);
+            border-radius: 30px;
+            padding: 60px;
+            flex: 1;
+            position: relative;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .art-text-content {
+            color: #92400E;
+            font-size: 1rem;
+            font-weight: bold;
+            
+            letter-spacing: 3px;
+            text-align: center;
+        }
+
+        .polaroid-gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: relative;
+            width: 280px;
+        }
+
+        .polaroid {
+            background: white;
+            padding: 20px 20px 60px 20px;
+            border-radius: 8px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+            transform-origin: center;
+            transition: all 0.4s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .polaroid::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 30%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 15px;
+            background: linear-gradient(135deg, #C0C0C0 0%, #808080 100%);
+            border-radius: 15px 15px 5px 5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .polaroid::after {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background: #666;
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+        }
+
+        .polaroid:hover {
+            transform: scale(1.08) rotate(0deg) !important;
+            z-index: 10;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+        }
+
+        .polaroid:nth-child(1) {
+            transform: rotate(-12deg);
+            margin-right: 40px;
+            margin-top: 20px;
+        }
+
+        .polaroid:nth-child(2) {
+            transform: rotate(8deg);
+            margin-left: 60px;
+            margin-top: -30px;
+            z-index: 2;
+        }
+
+        .polaroid:nth-child(3) {
+            transform: rotate(-6deg);
+            margin-right: 10px;
+            margin-top: -20px;
+            z-index: 3;
+        }
+
+        .polaroid img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+            display: block;
+        }
+
+        .polaroid-caption {
+            position: absolute;
+            bottom: 15px;
+            left: 20px;
+            right: 20px;
+            text-align: center;
+            color: #333;
+            font-size: 14px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Closure Page Styles */
+        .closure-content {
+            text-align: center;
+            padding: 60px 0;
+        }
+
+        .closure-title {
+            color: white;
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 50px;
+            text-transform: lowercase;
+            letter-spacing: 2px;
+        }
+
+        .closure-text-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 50px;
+            margin: 30px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .closure-text-box p {
+            color: white;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            text-align: justify;
+            margin-bottom: 20px;
+        }
+
+        .closure-text-box h3 {
+            color: #A7F3D0;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        /* Image Container Styles */
+        .image-container {
+            background: #000000;
+            border-radius: 25px;
+            padding: 40px;
+            min-height: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-box {
+            position: absolute;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Sun Side Images */
+        .sun-side-image1 {
+            width: 200px;
+            height: 150px;
+            bottom: 40px;
+            left: 40px;
+        }
+
+        .sun-side-image2 {
+            width: 200px;
+            height: 150px;
+            top: 40px;
+            right: 40px;
+        }
+
+        /* Moon Side Images */
+        .moon-side-image1 {
+            width: 180px;
+            height: 140px;
+            top: 40px;
+            right: 40px;
+        }
+
+        .moon-side-image2 {
+            width: 160px;
+            height: 120px;
+            bottom: 60px;
+            left: 60px;
+        }
+
+        .moon-side-image3 {
+            width: 140px;
+            height: 100px;
+            bottom: 40px;
+            right: 250px;
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .nav-button {
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .back-button {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Instructions */
+        .instructions {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 300px;
+            font-size: 12px;
+            line-height: 1.4;
+            z-index: 200;
+            display: none;
+        }
+
+        .instructions.show {
+            display: block;
+        }
+
+        .help-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            z-index: 150;
+        }
+
+        @media (max-width: 768px) {
+            .exposition-page h1, .closure-title {
+                font-size: 2.5rem;
+                margin-bottom: 30px;
+            }
+            
+            .content-box, .closure-text-box {
+                padding: 30px 25px;
+                margin-bottom: 20px;
+            }
+            
+            .content-box p, .closure-text-box p {
+                font-size: 1rem;
+            }
+
+            .page-title {
+                font-size: 1.5rem;
+                padding: 12px 20px;
+            }
+
+            .art-session-layout {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .art-text-area {
+                padding: 40px 30px;
+                min-height: 250px;
+            }
+
+            .art-text-content {
+                font-size: 1.8rem;
+                letter-spacing: 2px;
+            }
+
+            .polaroid-gallery {
+                width: 240px;
+            }
+
+            .polaroid {
+                padding: 15px 15px 50px 15px;
+            }
+
+            .polaroid img {
+                width: 160px;
+                height: 160px;
+            }
+
+            .polaroid:nth-child(1) {
+                margin-right: 30px;
+            }
+
+            .polaroid:nth-child(2) {
+                margin-left: 40px;
+            }
+
+            .image-container {
+                padding: 25px;
+                min-height: 400px;
+            }
+
+            .sun-side-image1, .sun-side-image2 {
+                width: 150px;
+                height: 120px;
+            }
+
+            .moon-side-image1 {
+                width: 140px;
+                height: 110px;
+            }
+
+            .moon-side-image2 {
+                width: 120px;
+                height: 90px;
+            }
+
+            .moon-side-image3 {
+                width: 100px;
+                height: 80px;
+                right: 160px;
+            }
+
+            .nav-buttons {
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .nav-button {
+                padding: 12px 24px;
+                font-size: 14px;
+            }
+
+            .back-button {
+                bottom: 20px;
+                left: 20px;
+                padding: 12px 24px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Help Button -->
+    <button class="help-button" onclick="toggleInstructions()">?</button>
+    
+    <!-- Instructions -->
+    <div class="instructions" id="instructions">
+    </div>
+
+    <!-- Exposition Page -->
+    <div class="page exposition-page active" id="expositionPage">
+        <div class="container">
+            <h1>exposition</h1>
+            
+            <div class="content-box small">
+                <p>
+                    Hey there!
+I'm Dylan Luis, but you can call me Al. I'm 15 years old, born on June 30th, and my favorite color is Indigo. Music is a huge part of my life—I love listening to alternative indie, nu metal, and melancholic songs because they keep the silence away, which I find pretty boring. 
+                </p>
+            </div>
+            
+            <div class="content-box large">
+                <p>
+                    When I'm not jamming to my favorite tunes, you'll probably find me drawing or creating art. I'm an ambivert, so I enjoy both spending time alone and hanging out with friends. Welcome to my corner of the internet, where I share my passion for music and art!
+                </p>
+            </div>
+        </div>
+        
+        <button class="nav-button" onclick="goToSunSide()">Next →</button>
+    </div>
+
+    <!-- Sun Side Page -->
+    <div class="page sun-side-page" id="sunSidePage">
+        <div class="container">
+            <div class="page-title">Sun side</div>
+            
+            <div class="content-box small">
+                <p>
+                    this is my extroverted "sun side" shining through! I’m all about that high-energy vibe, fueled by my favorite playlist: Linkin Park, Slipknot, Rammstein, Limp Bizkit, Evanescence, Twenty One Pilots, Soundgarden, System of a Down, and Deftones.
+                </p>
+            </div>
+            
+            <div class="image-container">
+                <div class="image-box sun-side-image1">
+                    <img src="sun1.jpeg" alt="Bear Portrait 1">
+                </div>
+                
+                <div class="image-box sun-side-image2">
+                    <img src="sun2.jpeg" alt="Bear Portrait 2">
+                </div>
+            </div>
+            
+            <div class="content-box large">
+                <p>
+                    metal, in particular, pumps me up and makes me feel like I’m anything but ordinary. People might think I don't stick to sad or melancholic songs, but this side of me is all about power and passion—welcome to my energetic escape!</p>
+            </div>
+        </div>
+        
+        <div class="nav-buttons">
+            <button class="nav-button" onclick="goToMoonSide()">Next →</button>
+        </div>
+        <button class="back-button" onclick="goToExposition()">← Back</button>
+    </div>
+
+    <!-- Moon Side Page -->
+    <div class="page moon-side-page" id="moonSidePage">
+        <div class="container">
+            <div class="page-title">Moonside</div>
+            
+            <div class="content-box small">
+                <p>
+                   Welcome to my "moon side," where my introverted soul shines. I love melancholic music over nu metal or hard songs, especially alternative indie artists like Salvia Palth, Take Care, Sign Crushes Motorist, Strawberry Guy, and Slowdive—honorable mention to Alex G. I’ve been hooked on these since mid-2024, and they bring me calm and a vibe I adore. Step into my peaceful escape!
+                </p>
+            </div>
+            
+            <div class="image-container">
+                <div class="image-box moon-side-image1">
+                    <img src="moon1.jpeg" alt="Bear in Nature 1">
+                </div>
+            </div>
+        
+        </div>
+        
+        <div class="nav-buttons">
+            <button class="nav-button" onclick="goToArtSession()">Next →</button>
+        </div>
+        <button class="back-button" onclick="goToSunSide()">← Back</button>
+    </div>
+
+    <!-- Art Session Page -->
+    <div class="page art-session-page" id="artSessionPage">
+        <div class="container">
+            <div class="art-session-layout">
+                <div class="art-text-area">
+                    <div class="art-text-content">
+                        I’ve been sketching since 6th grade in 2023, sparked by the amazing @Maya_panda94. I lean toward black and white drawings—just a pen and pencil do the trick for me. Even with a stash of Deli markers, pencil colors, and High Tune acrylics, I rarely use them. My favorite drawing pen is the underrated Snowman drawing pen—its lines never fade or blur, making it perfect for my style. Dive into my world of art. I wish to became an artist, in a world full of A.I XD
+                    </div>
+                </div>
+                
+                <div class="polaroid-gallery">
+                    <div class="polaroid">
+                        <img src="1.jpeg" alt="Bear Sketch 1">
+                        <div class="polaroid-caption">sketch #01</div>
+                    </div>
+                    <div class="polaroid">
+                        <img src="2.jpeg" alt="Bear Sketch 2">
+                        <div class="polaroid-caption">sketch #02</div>
+                    </div>
+                    <div class="polaroid">
+                        <img src="3.jpeg" alt="Bear Sketch 3">
+                        <div class="polaroid-caption">sketch #03</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="nav-buttons">
+            <button class="nav-button" onclick="goToClosure()">Next →</button>
+        </div>
+        <button class="back-button" onclick="goToMoonSide()">← Back</button>
+    </div>
+
+    <!-- Closure Page -->
+    <div class="page closure-page" id="closurePage">
+        <div class="container">
+            <div class="closure-content">
+                <h1 class="closure-title">close.</h1>
+                
+                <div class="closure-text-box">
+                    <h3>Story behind the website</h3>
+                    <p>hallo, nama ku adalah charles, aku adalah pembuat website ini, saya sekali lagi mengucapkan selamat ulang tahun!! teruntuk dylan luis teman ku!</p>
+                </div>
+
+                <div class="closure-text-box">
+                    <h3>Behind the creation of the website</h3>
+                    <p>So, when I made this website, Louis asked me to make this website according to his wishes, so, for the last 10 days, I tried to fix the errors and design, I really hate it, because I'm confused, why when I change a little bit, it immediately gets bigger, the code is really bad
+</p>
+                </div>
+
+                <div class="closure-text-box">
+                    <h3>closing message</h3>
+                    <p>the code really fucked up. anyways, happy birthday bro!</p>
+                </div>
+            </div>
+        </div>
+        
+        <button class="back-button" onclick="goToArtSession()">← Back</button>
+    </div>
+
+    <script>
+        // Navigation functions
+        function goToSunSide() {
+            hideAllPages();
+            document.getElementById('sunSidePage').classList.add('active');
+        }
+
+        function goToMoonSide() {
+            hideAllPages();
+            document.getElementById('moonSidePage').classList.add('active');
+        }
+
+        function goToExposition() {
+            hideAllPages();
+            document.getElementById('expositionPage').classList.add('active');
+        }
+
+        function goToArtSession() {
+            hideAllPages();
+            document.getElementById('artSessionPage').classList.add('active');
+        }
+
+        function goToClosure() {
+            hideAllPages();
+            document.getElementById('closurePage').classList.add('active');
+        }
+
+        function hideAllPages() {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+        }
+
+        // Instructions toggle
+        function toggleInstructions() {
+            const instructions = document.getElementById('instructions');
+            instructions.classList.toggle('show');
+        }
+
+        // Close instructions when clicking outside
+        document.addEventListener('click', function(event) {
+            const instructions = document.getElementById('instructions');
+            const helpButton = document.querySelector('.help-button');
+            
+            if (!instructions.contains(event.target) && !helpButton.contains(event.target)) {
+                instructions.classList.remove('show');
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            const currentPage = document.querySelector('.page.active');
+            
+            if (event.key === 'ArrowRight') {
+                if (currentPage.id === 'expositionPage') {
+                    goToSunSide();
+                } else if (currentPage.id === 'sunSidePage') {
+                    goToMoonSide();
+                } else if (currentPage.id === 'moonSidePage') {
+                    goToArtSession();
+                } else if (currentPage.id === 'artSessionPage') {
+                    goToClosure();
+                }
+            } else if (event.key === 'ArrowLeft') {
+                if (currentPage.id === 'sunSidePage') {
+                    goToExposition();
+                } else if (currentPage.id === 'moonSidePage') {
+                    goToSunSide();
+                } else if (currentPage.id === 'artSessionPage') {
+                    goToMoonSide();
+                } else if (currentPage.id === 'closurePage') {
+                    goToArtSession();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
